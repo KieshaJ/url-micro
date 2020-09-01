@@ -1,6 +1,7 @@
 import * as Controller from './controller';
 
 export default (app) => {
-    app.get('/:slug', Controller.getUrl);
+    app.get('/url/:slug', Controller.getUrl);
     app.post('/url', Controller.createUrl);
+    app.get('/url', Controller.listTopUrls);
 };

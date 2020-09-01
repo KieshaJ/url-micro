@@ -1,0 +1,9 @@
+.App {
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+* {
+    font-family: 'Source Code Pro', monospace !important;
+}
