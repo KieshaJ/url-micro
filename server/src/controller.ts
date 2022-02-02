@@ -2,6 +2,11 @@ import monk from "monk";
 import {nanoid} from "nanoid";
 import * as yup from "yup";
 import dotenv from "dotenv";
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
 
 dotenv.config();
 
@@ -14,38 +19,42 @@ const schema = yup.object().shape({
     url: yup.string().trim().url().required()
 });
 
-exports.listTopUrls = async (req, res) => {
+const listTopUrls = async (req: Request, res: Response) => {
     const list = await urls.find({}, {sort: {clicks: -1}, limit: 10});
     res.json(list);
 };
 
-exports.getUrl = async (req, res) => {
+const getUrl = async (req: Request, res: Response) => {
     const {slug} = req.params;
 
     try {
         const url = await urls.findOneAndUpdate({slug}, {$inc: {clicks: 1}});
         res.header('Access-Control-Allow-Origin', 'http://localhost:3000/');
         res.redirect(url.url);
-    }
-    catch (error) {
+    } catch (error) {
         res.redirect(`/?error=URL not found`);
     }
 };
 
-exports.createUrl = async (req, res, next) => {
-    let {slug, url} = req.body;
+const createUrl = async (req: Request, res: Response, next: NextFunction) => {
+    const {slug, url} = req.body;
 
     try {
         await schema.validate({slug, url});
 
-        slug = slug ? slug.toLowerCase() : nanoid(7).toLowerCase();
+        const newSlug = slug ? slug.toLowerCase() : nanoid(7).toLowerCase();
 
-        const newUrl = {url, slug, clicks: 0};
+        const newUrl = {url, newSlug, clicks: 0};
         const created = await urls.insert(newUrl);
 
         res.json(created);
-    }
-    catch (error) {
+    } catch (error) {
         next(error);
     }
 };
+
+export {
+    getUrl,
+    createUrl,
+    listTopUrls
+}

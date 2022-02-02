@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import ErrorHandler from './errorHandler';
+// import * as ErrorHandler from "./errorHandler";
 import Routes from './routes';
 
 const server = express();
@@ -19,8 +19,8 @@ server.use(express.json());
 
 Routes(server);
 
-server.use(ErrorHandler);
+// server.use(ErrorHandler);
 
 server.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}`);
+    // console.log(`Listening at http://localhost:${port}`);
 });
