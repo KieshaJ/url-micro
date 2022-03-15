@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
-const UrlSchema = new mongoose.Schema({
-    url: String,
+interface Url {
+    url: string,
+    slug: string
+}
+
+const urlSchema = new mongoose.Schema<Url>({
+    url: {type: String, required: true},
     slug: String,
 }, {
     timestamps: true
 });
 
-const UrlModel = mongoose.model("urls", UrlSchema);
+const urlModel = mongoose.model("urls", urlSchema);
 
-export default UrlModel;
+export default urlModel;

@@ -6,7 +6,7 @@ dotenv.config();
 const DB_URL = process.env.MONGODB_URL;
 mongoose.Promise = global.Promise;
 const db = {
-    mongoose: mongoose,
+    mongoose,
     url: DB_URL
 };
 

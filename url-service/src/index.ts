@@ -7,7 +7,7 @@ import UrlRoutes from "./routes/UrlRoutes";
 
 dotenv.config();
 
-db.mongoose.connect(db.url);
+await db.mongoose.connect(db.url);
 
 const server = express();
 const PORT = process.env.PORT || 10020;
@@ -17,4 +17,4 @@ server.use(express.json());
 
 server.use(UrlRoutes);
 
-server.listen(PORT, () => {});
+server.listen(PORT);
