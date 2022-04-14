@@ -1,8 +1,15 @@
 import dotenv from "dotenv";
 import {Request, Response} from "express";
-import UrlModel from "../models/UrlModel";
+import { nanoid } from "nanoid";
+import UrlModel from "../models/UrlModel.js";
 
 dotenv.config();
+
+interface UrlRequest {
+    url: string,
+    slug: string,
+    clicks: number
+}
 
 const listTopUrls = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -34,12 +41,15 @@ const getUrl = async (req: Request, res: Response): Promise<void> => {
 }
 
 const createUrl = async (req: Request, res: Response): Promise<void> => {
-    const urlData = new UrlModel(req.body);
-
     try {
+        // TODO add validation
+        const reqBody = req.body as UrlRequest;
+        const url: string = reqBody.url ? reqBody.url : "";
+        const slug: string = reqBody.slug ? reqBody.slug : nanoid(7);
+        const urlData = new UrlModel({url, slug, clicks: 0});
         const savedUrl = await urlData.save();
         res.status(200).json(savedUrl);
-    } catch (error: unknown) {
+    } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({
                 message: error.message
